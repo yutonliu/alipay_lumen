@@ -1,6 +1,7 @@
 <?php
 namespace App\Tools\Alipay;
 
+use App\Tools\Alipay\Alipay;
 use App\Tools\Alipay\Service\AlipayTradeService;
 use App\Tools\Alipay\Buildermodel\AlipayTradeWapPayContentBuilder;
 
