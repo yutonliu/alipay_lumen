@@ -1,11 +1,15 @@
 <?php
-namespace App\Tools;
+namespace App\Tools\Alipay;
 
-use App\Tools\Alipay\Aop\AlipayTradePayRequest;
+use App\Tools\Alipay\Alipay;
 use App\Tools\Alipay\Service\AlipayTradeService;
 use App\Tools\Alipay\Buildermodel\AlipayTradePagePayContentBuilder;
 
-
+/***
+ * Class Pcpay
+ * @title 电脑网站支付宝支付
+ * @package App\Tools\Alipay
+ */
 class Pcpay implements Alipay
 {
      /**
@@ -14,7 +18,7 @@ class Pcpay implements Alipay
      * 付款金额，必填
      * 商品描述，可空
      */
-    public static function _request($out_trade_no,$subject,$total_amount,$body="")
+    public static function payRequest($out_trade_no,$subject,$total_amount,$body=null)
     {
         //支付宝配置文件
         $config = config('alipay');

@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Alipay\PC;
 
 use App\Http\Controllers\Controller;
-//use Illuminate\Http\Request;
-//
-//use App\Tools\Alipay\Alipay\Pcpay;
-//use App\Tools\Alipay\Alipay\Wappay;
 
+use App\Tools\Alipay\Pcpay;
+use App\Tools\Alipay\Wappay;
+use App\Tools\Alipay\Apppay;
 
 class AlipayController extends Controller
 {
@@ -28,7 +27,7 @@ class AlipayController extends Controller
         //商品描述，可空
         $body = "这是一件商品";
 
-        $response = Pcpay::_request($out_trade_no,$subject,$total_amount,$body="");
+        $response = Pcpay::payRequest($out_trade_no,$subject,$total_amount,$body="");
 
         return $response;
     }
@@ -51,9 +50,31 @@ class AlipayController extends Controller
         //商品描述，可空
         $body = "这是一件商品";
 
-        $response = Wappay::_request($out_trade_no,$subject,$total_amount,$body="");
+        $response = Wappay::payRequest($out_trade_no,$subject,$total_amount,$body="");
 
         return ;
+    }
+
+    /**
+     * 手机网站支付
+     */
+    public function apppay()
+    {   
+        //商户订单号，商户网站订单系统中唯一订单号，必填
+        $out_trade_no = time().rand(100,999);
+
+        //订单名称，必填
+        $subject = "杜蕾斯奶糖";
+
+        //付款金额，必填
+        $total_amount = 0.01;
+
+        //商品描述，可空
+        $body = "这是一件商品";
+
+        $response = Apppay::payRequest($out_trade_no,$subject,$total_amount,$body="");
+
+        return $response;
     }
 
     /**

@@ -23,6 +23,8 @@ $router->get('/', function () use ($router) {
 $router->get('alipay/pc', 'Alipay\PC\AlipayController@pcpay');
 //手机支付
 $router->get('alipay/wap', 'Alipay\PC\AlipayController@wappay');
+//App支付
+$router->get('alipay/app', 'Alipay\PC\AlipayController@apppay');
 
 //同步回调
 $router->get('alipay/paysucc', 'Alipay\PC\AlipayController@succ');

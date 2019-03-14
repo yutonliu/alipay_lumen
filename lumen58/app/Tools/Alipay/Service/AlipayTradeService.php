@@ -10,6 +10,7 @@ namespace App\Tools\Alipay\Service;
 use App\Tools\Alipay\Aop\Request\AlipayTradePayRequest;
 use App\Tools\Alipay\Aop\Request\AlipayTradePagePayRequest;
 use App\Tools\Alipay\Aop\Request\AlipayTradeWapPayRequest;
+use App\Tools\Alipay\Aop\Request\AlipayTradeAppPayRequest;
 use App\Tools\Alipay\Aop\AopClient;
 
 
@@ -182,6 +183,68 @@ class AlipayTradeService {
         return $response;
     }
 
+
+    /**
+     * app支付
+     */
+    /**
+     * alipay.trade.app.pay
+     * @param $builder 业务参数，使用buildmodel中的对象生成。
+     * @param $return_url 同步跳转地址，公网可访问
+     * @param $notify_url 异步通知地址，公网可以访问
+     * @return $response 支付宝返回的信息
+     */
+    function appPay($builder,$return_url,$notify_url) {
+
+        $biz_content=$builder->getBizContent();
+        //打印业务参数
+        $this->writeLog($biz_content);
+
+        $request = new AlipayTradeAppPayRequest();
+
+        $request->setNotifyUrl($notify_url);
+        $request->setReturnUrl($return_url);
+        $request->setBizContent ( $biz_content );
+
+        // 首先调用支付api
+        $response = $this->aopclientAppRequestExecute ($request);
+        // $response = $response->alipay_trade_wap_pay_response;
+        return $response;
+    }
+
+    /**
+     * sdkClient  app支付拼装参数对象
+     * @param $request 接口请求参数对象。
+     * @param $ispage  是否是页面接口，电脑网站支付是页面表单接口。
+     * @return $response 支付宝返回的信息
+     */
+    function aopclientAppRequestExecute($request) {
+
+        $aop = new AopClient ();
+        $aop->gatewayUrl = $this->gateway_url;
+        $aop->appId = $this->appid;
+        $aop->rsaPrivateKey =  $this->private_key;
+        $aop->alipayrsaPublicKey = $this->alipay_public_key;
+        $aop->apiVersion ="1.0";
+        $aop->postCharset = $this->charset;
+        $aop->format= $this->format;
+        $aop->signType=$this->signtype;
+//        // 开启页面信息输出
+//        $aop->debugInfo=true;
+//        if($ispage)
+//        {
+//            $result = $aop->pageExecute($request,"post");
+//            echo $result;
+//        }
+//        else
+//        {
+//            $result = $aop->Execute($request);
+//        }
+        $result = $aop->sdkExecute($request); 
+        //打开后，将报文写入log文件
+        $this->writeLog("response: ".var_export($result,true));
+        return $result;
+    }
 }
 
 ?>
